@@ -22,7 +22,9 @@ contract MaliciousFactory {
 }
 
 
-contract VestingEscrowFactoryTest is TestUtil {actually calls the malicious voting adapter's function that executes selfdestruct().{owner: address(1), manager: address(2)}));
+contract VestingEscrowFactoryTest is TestUtil {
+    function setUp() public {
+        setUpProtocol(ProtocolConfig({owner: address(1), manager: address(2)}));
         deployVestingEscrow(
             VestingEscrowConfig({
                 amount: 1 ether,
@@ -84,6 +86,7 @@ contract VestingEscrowFactoryTest is TestUtil {actually calls the malicious voti
         factory.changeManager(address(1));
     }
 
+    
     function testArbitraryDelegateCall() public {
     address maliciousFactory = address(new MaliciousFactory());
     address vestingEscrowImpl = factory.vestingEscrowImpl();
